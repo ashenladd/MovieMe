@@ -29,13 +29,14 @@ class MovieRepositoryImpl @Inject constructor(private val dataSource: MovieRemot
         }
     }
 
-    override suspend fun getMovie(movieId: Int): Flow<ApiResult<MovieModel?>> {
+    override suspend fun getMovie(movieId: Int): Flow<ApiResult<MovieModel>> {
         return flow {
             val response = dataSource.getMovie(movieId)
             if (response.isSuccessful) {
                 emit(
                     ApiResult.Success(
-                        _data = response.body()?.toModel())
+                        _data = response.body()?.toModel() ?: MovieModel()
+                    )
                 )
             } else {
                 val errorResponse = response.errorBody()?.toString().orEmpty()

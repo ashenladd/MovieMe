@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="TextAppearance.Cormorant.MovieMe.Title1" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/cormorant_garamond_bold</item>
+        <item name="android:textSize">@dimen/text_24sp</item>
+    </style>
+
+    <style name="TextAppearance.Cormorant.MovieMe.Title2" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/cormorant_garamond_bold</item>
+        <item name="android:textSize">@dimen/text_20sp</item>
+    </style>
+
+    <style name="TextAppearance.Cormorant.MovieMe.Title3" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/cormorant_garamond_bold</item>
+        <item name="android:textSize">@dimen/text_18sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Title1" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:textSize">@dimen/text_24sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Title2" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/lexend_semibold</item>
+        <item name="android:textSize">@dimen/text_20sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Title3" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/lexend_bold</item>
+        <item name="android:textSize">@dimen/text_18sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Body1" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/lexend_regular</item>
+        <item name="android:textSize">@dimen/text_12sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Body2" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/lexend_regular</item>
+        <item name="android:textSize">@dimen/text_10sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Subtitle1" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/lexend_light</item>
+        <item name="android:textSize">@dimen/text_12sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Caption1" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/lexend_regular</item>
+        <item name="android:textSize">@dimen/text_10sp</item>
+    </style>
+
+    <style name="TextAppearance.Lexend.MovieMe.Button1" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/lexend_medium</item>
+        <item name="android:textSize">@dimen/text_16sp</item>
+    </style>
+
+</resources>

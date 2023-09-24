@@ -1,6 +1,7 @@
 package com.example.movieme.di
 
 import com.example.movieme.data.source.remote.network.MovieConstant
+import com.example.movieme.data.source.remote.network.MovieConstant.API_KEY
 import com.example.movieme.data.source.remote.network.MovieService
 import dagger.Module
 import dagger.Provides
@@ -10,30 +11,43 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
-    fun ProvideNetworkInterceptor(): OkHttpClient {
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
+    fun provideNetworkInterceptor(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val httpClient = OkHttpClient.Builder()
 
-        return OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .build()
+        httpClient.addNetworkInterceptor { chain ->
+            val original = chain.request()
+            val requestBuilder = original.newBuilder()
+                .header(
+                    "Authorization",
+                    "Bearer $API_KEY"
+                )
+                .header(
+                    "accept",
+                    "application/json"
+                )
+            val request = requestBuilder.build()
+            chain.proceed(request)
+        }
+        return httpClient.build()
     }
 
     @Provides
-    fun ProvideNetworkClient(interceptor: OkHttpClient): Retrofit =
+    fun provideNetworkClient(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl(MovieConstant.BASE_URL)
-            .client(interceptor)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
     @Provides
-    fun ProvideNetworkService(retrofit: Retrofit) : MovieService = retrofit.create(MovieService::class.java)
+    fun provideNetworkService(retrofit: Retrofit): MovieService =
+        retrofit.create(MovieService::class.java)
 }

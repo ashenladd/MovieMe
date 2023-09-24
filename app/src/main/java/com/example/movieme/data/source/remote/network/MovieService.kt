@@ -11,14 +11,14 @@ import retrofit2.http.Query
 
 interface MovieService {
     @GET(MOVIE_LIST)
-    suspend fun getListMovie(
-        @Query("api_key") apiKey:String = "a5bce38b74a0a7d44e0209b162b12d75",
+    suspend fun getMovieList(
+        @Query("api_key") apiKey:String,
         @Query("page") page:Int = 1
     ):Response<MovieListRes>
 
-    @GET("$MOVIE_DETAIL/{movieId}")
+    @GET(MOVIE_DETAIL)
     suspend fun getMovie(
-        @Query("api_key") apiKey:String = "a5bce38b74a0a7d44e0209b162b12d75",
+        @Query("api_key") apiKey:String,
         @Path("movieId") movieId:Int
     ):Response<MovieResultRes>
 
