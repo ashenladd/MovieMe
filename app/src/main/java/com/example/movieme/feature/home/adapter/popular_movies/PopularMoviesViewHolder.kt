@@ -1,11 +1,11 @@
-package com.example.movieme.feature.movies.adapter
+package com.example.movieme.feature.home.adapter.popular_movies
 
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.movieme.databinding.ItemMovieVerticalBinding
 import com.example.movieme.domain.model.MovieModel
 
-class MoviesViewHolder(val binding: ItemMovieVerticalBinding) : ViewHolder(binding.root) {
+class PopularMoviesViewHolder (private val binding: ItemMovieVerticalBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
         model: MovieModel,
     ) {

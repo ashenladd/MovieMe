@@ -1,6 +1,5 @@
-package com.example.movieme.feature.movies
+package com.example.movieme.feature.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieme.domain.usecase.MovieUseCase
@@ -17,69 +16,49 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val movieUseCase: MovieUseCase,
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow<MoviesViewState>(MoviesViewState())
+    private val _viewState = MutableStateFlow<HomeViewState>(HomeViewState())
     val viewState get() = _viewState.asStateFlow()
 
-    private val _viewEffect = MutableSharedFlow<MoviesViewEffect>()
+    private val _viewEffect = MutableSharedFlow<HomeViewEffect>()
     val viewEffect get() = _viewEffect.asSharedFlow()
 
     init {
-        getMovies(_viewState.value.page)
+        getPopularMovies()
     }
 
-    fun onEvent(event: MoviesViewEvent) {
-        when (event) {
-            is MoviesViewEvent.NextPage -> {
-                _viewState.update {
-                    it.copy(
-                        page = _viewState.value.page + 1
-                    )
-                }
-                getMovies(_viewState.value.page)
-            }
-
-            is MoviesViewEvent.PrevPage -> {
-                _viewState.update {
-                    it.copy(
-                        page = _viewState.value.page - 1
-                    )
-                }
-                getMovies(_viewState.value.page)
-            }
-        }
-    }
-
-    private fun getMovies(page: Int) {
+    private fun getPopularMovies() {
         viewModelScope.launch {
-            movieUseCase.getMovieList(page)
+            movieUseCase.getMovieList(1)
                 .onStart {
-                    _viewEffect.emit(MoviesViewEffect.OnLoadingMovies)
+                    _viewEffect.emit(HomeViewEffect.OnLoadingMovies)
                 }.collectLatest { it ->
                     when (it.status) {
                         ApiStatus.LOADING -> {
-                            _viewEffect.emit(MoviesViewEffect.OnLoadingMovies)
+                            _viewEffect.emit(HomeViewEffect.OnLoadingMovies)
                         }
 
                         ApiStatus.ERROR -> {
                             val errorResponse = it.message
-                            _viewEffect.emit(MoviesViewEffect.OnError(errorResponse.orEmpty()))
+                            _viewEffect.emit(HomeViewEffect.OnError(errorResponse.orEmpty()))
                         }
 
                         ApiStatus.SUCCESS -> {
                             val data = it.data
                             _viewState.update { state ->
                                 state.copy(
-                                    movies = data.orEmpty(),
-                                    page = page
+                                    popularMovies = data.orEmpty(),
+                                    //nanti ganti api service untuk upcoming
+                                    recentMovies = data.orEmpty()
                                 )
                             }
-                            _viewEffect.emit(MoviesViewEffect.OnSuccessGetMoviesList(data.orEmpty()))
+                            _viewEffect.emit(HomeViewEffect.OnSuccessGetMoviesList(data.orEmpty()))
                         }
                     }
                 }
         }
     }
+
 }

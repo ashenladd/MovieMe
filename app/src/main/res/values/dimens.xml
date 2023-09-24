@@ -14,4 +14,8 @@
     <dimen name="text_34sp">34sp</dimen>
     <dimen name="corner_30dp">30dp</dimen>
     <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_60dp">60dp</dimen>
+    <dimen name="margin_28dp">28dp</dimen>
 </resources>

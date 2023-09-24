@@ -6,7 +6,6 @@ data class MovieModel(
     val overview: String? = null,
     val posterPath: String? = null,
     val backdropPath: String? = null,
-    val rating: Double? = null,
     val releaseDate: String? = null,
     val voteAverage: Double? = null,
     val popularity: Double? = null,

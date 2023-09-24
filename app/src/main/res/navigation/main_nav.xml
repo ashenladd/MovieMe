@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/moviesFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/moviesFragment"
         android:name="com.example.movieme.feature.movies.MoviesFragment"
         android:label="fragment_movies"
         tools:layout="@layout/fragment_movies" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.movieme.feature.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
