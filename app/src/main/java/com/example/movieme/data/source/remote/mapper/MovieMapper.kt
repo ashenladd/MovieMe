@@ -9,8 +9,7 @@ fun MovieResultRes.toModel() = MovieModel(
     overview = overview.orEmpty(),
     posterPath = posterPath.orEmpty(),
     backdropPath = backdropPath.orEmpty(),
-    rating = rating ?: 0.0f,
     releaseDate = releaseDate.orEmpty(),
-    voteAverage = voteAverage ?: 0.0f,
-    popularity = popularity ?: 0.0f
+    voteAverage = voteAverage ?: 0.0,
+    popularity = popularity ?: 0.0
 )

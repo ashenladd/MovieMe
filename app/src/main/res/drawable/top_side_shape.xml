@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The black background -->
+    <item android:drawable="@color/black" />
+
+    <!-- The PNG image on top of the black background -->
+    <item
+        android:drawable="@drawable/circuit_board"
+        android:gravity="center" />
+    <item
+        android:drawable="@drawable/ellipse"
+        android:gravity="start"/>
+</layer-list>

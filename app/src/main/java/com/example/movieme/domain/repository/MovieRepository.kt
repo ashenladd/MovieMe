@@ -14,5 +14,5 @@ interface MovieRepository {
 
     suspend fun getMovie(
         movieId:Int
-    ): Flow<ApiResult<MovieModel?>>
+    ): Flow<ApiResult<MovieModel>>
 }

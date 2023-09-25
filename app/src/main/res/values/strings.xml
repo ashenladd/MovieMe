@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MovieMe</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_movieme">MovieMe</string>
+    <string name="label_greeting">Hey, User!</string>
+    <string name="label_headline">Let\'s Discover The\nLatest Movie</string>
+    <string name="label_recent_movies">Recent Movies</string>
+    <string name="label_popular_now">Popular Now</string>
 </resources>

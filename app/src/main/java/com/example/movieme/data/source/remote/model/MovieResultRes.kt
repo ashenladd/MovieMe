@@ -13,12 +13,12 @@ data class MovieResultRes(
     val posterPath: String? = null,
     @SerializedName("backdrop_path")
     val backdropPath: String? = null,
-    @SerializedName("vote_average")
-    val rating: Float? = null,
+//    @SerializedName("vote_average")
+//    val rating: Double? = null,
     @SerializedName("release_date")
     val releaseDate: String? = null,
     @SerializedName("vote_average")
-    val voteAverage:Float? = null,
+    val voteAverage: Double? = null,
     @SerializedName("popularity")
-    val popularity:Float? = null
+    val popularity: Double? = null,
 )
