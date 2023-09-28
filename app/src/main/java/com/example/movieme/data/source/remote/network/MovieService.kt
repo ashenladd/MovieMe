@@ -18,8 +18,8 @@ interface MovieService {
 
     @GET(MOVIE_DETAIL)
     suspend fun getMovie(
+        @Path("movieId") movieId:Long,
         @Query("api_key") apiKey:String,
-        @Path("movieId") movieId:Int
     ):Response<MovieResultRes>
 
 }

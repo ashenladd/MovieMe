@@ -36,6 +36,9 @@ object NetworkModule {
             val request = requestBuilder.build()
             chain.proceed(request)
         }
+
+        httpClient.addInterceptor(interceptor)
+
         return httpClient.build()
     }
 

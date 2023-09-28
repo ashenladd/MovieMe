@@ -10,6 +10,6 @@ interface MovieRemoteDataSource {
     ): Response<MovieListRes>
 
     suspend fun getMovie(
-        movieId: Int,
+        movieId: Long,
     ): Response<MovieResultRes>
 }

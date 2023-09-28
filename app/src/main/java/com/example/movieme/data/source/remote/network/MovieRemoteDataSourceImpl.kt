@@ -15,7 +15,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(private val movieService: Mo
         )
     }
 
-    override suspend fun getMovie(movieId: Int): Response<MovieResultRes> {
+    override suspend fun getMovie(movieId: Long): Response<MovieResultRes> {
         return movieService.getMovie(
             apiKey = API_KEY,
             movieId = movieId

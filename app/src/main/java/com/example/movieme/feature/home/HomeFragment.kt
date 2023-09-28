@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieme.databinding.FragmentHomeBinding
 import com.example.movieme.domain.model.MovieModel
@@ -19,7 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeListener {
 
     private var _binding: FragmentHomeBinding? = null
     val binding get() = _binding!!
@@ -27,11 +29,11 @@ class HomeFragment : Fragment() {
     private val mViewModel: HomeViewModel by viewModels()
 
     private val mPopularMoviesAdapter: PopularMoviesAdapter by lazy {
-        PopularMoviesAdapter()
+        PopularMoviesAdapter(this)
     }
 
     private val mRecentMoviesAdapter: RecentMoviesAdapter by lazy {
-        RecentMoviesAdapter()
+        RecentMoviesAdapter(this)
     }
 
     override fun onCreateView(
@@ -50,6 +52,18 @@ class HomeFragment : Fragment() {
 
         setupAdapter()
         setupObserver()
+        setupClickListener()
+    }
+
+    private fun setupClickListener() {
+        binding.apply {
+            ibNarrowArrowRight1.setOnClickListener {
+                navigatoToMovies("recent_movies")
+            }
+            ibNarrowArrowRight2.setOnClickListener {
+                navigatoToMovies("populart_movies")
+            }
+        }
     }
 
     private fun setupObserver() {
@@ -96,6 +110,24 @@ class HomeFragment : Fragment() {
                 requireContext(),
             )
             rvMoviesVertical.adapter = mPopularMoviesAdapter
+        }
+    }
+
+    override fun navigateToMovieDetail(movieId: Long) {
+        try {
+            val directions = HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment(movieId)
+            findNavController().navigate(directions)
+        }catch (e:Exception){
+            Toast.makeText(requireContext(),"${e.message}",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun navigatoToMovies(featureName: String) {
+        try {
+            val directions = HomeFragmentDirections.actionHomeFragmentToMoviesFragment(featureName)
+            findNavController().navigate(directions)
+        }catch (e:Exception){
+            Toast.makeText(requireContext(),"${e.message}",Toast.LENGTH_SHORT).show()
         }
     }
 }
