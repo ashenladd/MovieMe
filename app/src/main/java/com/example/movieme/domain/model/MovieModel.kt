@@ -9,5 +9,6 @@ data class MovieModel(
     val releaseDate: String? = null,
     val voteAverage: Double? = null,
     val popularity: Double? = null,
-    val voteCount:Int? = null
+    val voteCount: Int? = null,
+    val language: String? = null,
 )

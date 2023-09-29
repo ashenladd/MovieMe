@@ -1,7 +1,9 @@
 package com.example.movieme.data.source.remote.model
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class MovieResultRes(
     @SerializedName("id")
     val id: Long? = null,
@@ -21,4 +23,6 @@ data class MovieResultRes(
     val voteAverage: Double? = null,
     @SerializedName("popularity")
     val popularity: Double? = null,
+    @SerializedName("original_language")
+    val language: String? = null,
 )

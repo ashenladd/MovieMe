@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".feature.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,12 +77,12 @@
             style="@style/TextAppearance.Cormorant.MovieMe.Title2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_28dp"
             android:layout_marginStart="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_28dp"
             android:text="@string/label_recent_movies"
             android:textColor="@color/black"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintEnd_toStartOf="@id/ib_narrow_arrow_right1"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,9 +90,9 @@
             android:id="@+id/ib_narrow_arrow_right1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_24dp"
             android:background="@color/white"
             android:src="@drawable/ic_narrow_arrow_right"
-            android:layout_marginEnd="@dimen/margin_24dp"
             app:layout_constraintBottom_toBottomOf="@id/tv_label_recent_movies"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_label_recent_movies"
@@ -103,21 +103,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_20dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_label_recent_movies"
-            app:layout_constraintTop_toBottomOf="@+id/tv_label_recent_movies" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_label_recent_movies"
+            tools:listitem="@layout/item_movie_horizontal" />
 
         <TextView
             android:id="@+id/tv_label_popular_now"
             style="@style/TextAppearance.Cormorant.MovieMe.Title2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="@dimen/margin_24dp"
+            android:layout_marginTop="20dp"
             android:text="@string/label_popular_now"
             android:textColor="@color/black"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintEnd_toStartOf="@id/ib_narrow_arrow_right2"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_movies_horizontal" />
 
@@ -125,9 +128,9 @@
             android:id="@+id/ib_narrow_arrow_right2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_24dp"
             android:background="@color/white"
             android:src="@drawable/ic_narrow_arrow_right"
-            android:layout_marginEnd="@dimen/margin_24dp"
             app:layout_constraintBottom_toBottomOf="@id/tv_label_popular_now"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_label_popular_now"
@@ -138,11 +141,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/margin_20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/ib_narrow_arrow_right2"
             app:layout_constraintStart_toStartOf="@+id/tv_label_popular_now"
             app:layout_constraintTop_toBottomOf="@+id/tv_label_popular_now"
-            tools:listitem="@layout/item_movie_vertical"/>
+            tools:listitem="@layout/item_movie_vertical" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

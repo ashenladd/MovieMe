@@ -99,16 +99,7 @@ class HomeFragment : Fragment(), HomeListener {
 
     private fun setupAdapter() {
         binding.apply {
-            rvMoviesHorizontal.layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
             rvMoviesHorizontal.adapter = mRecentMoviesAdapter
-
-            rvMoviesVertical.layoutManager = LinearLayoutManager(
-                requireContext(),
-            )
             rvMoviesVertical.adapter = mPopularMoviesAdapter
         }
     }

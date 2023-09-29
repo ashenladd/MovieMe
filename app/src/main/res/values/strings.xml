@@ -7,4 +7,8 @@
     <string name="label_headline">Let\'s Discover The\nLatest Movie</string>
     <string name="label_recent_movies">Recent Movies</string>
     <string name="label_popular_now">Popular Now</string>
+    <string name="label_description">Description</string>
+    <string name="label_watch_now">Watch Now</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_released">Released</string>
 </resources>

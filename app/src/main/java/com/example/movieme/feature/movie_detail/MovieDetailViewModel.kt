@@ -27,30 +27,36 @@ class MovieDetailViewModel @Inject constructor(
     private val _viewEffect = MutableSharedFlow<MovieDetailViewEffect>()
     val viewEffect get() = _viewEffect.asSharedFlow()
 
-    private var currentId: Long? = null
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing get() = _isRefreshing.asStateFlow()
+
+
+    var currentId: Long? = null
 
     init {
 
     }
 
-    fun loadMovie(movieId: Long) {
-        Log.d("ViewModelMovieDetail","Movie ID LoadMovie = $movieId")
-        getMovie(movieId)
+    fun onEvent(event: MovieDetailViewEvent) {
+        when(event){
+            is MovieDetailViewEvent.LoadPage ->{
+                getMovie(event.movieId)
+            }
+            is MovieDetailViewEvent.RefreshPage ->{
+                getMovie(event.movieId)
+            }
+        }
     }
 
     private fun getMovie(movieId: Long) {
-        Log.d("ViewModelMovieDetail","Movie ID On Start= $movieId")
         viewModelScope.launch {
             movieUseCase.getMovie(movieId)
                 .onStart {
                     _viewEffect.emit(MovieDetailViewEffect.OnLoadingMovies)
-                    Log.d("ViewModelMovieDetail","Movie Loading $movieId")
                 }.collectLatest {
                     when (it.status) {
                         ApiStatus.LOADING -> {
                             _viewEffect.emit(MovieDetailViewEffect.OnLoadingMovies)
-                            Log.d("ViewModelMovieDetail","Movie Status Loading = ${it.status}")
-                            Log.d("ViewModelMovieDetail","Movie ID Loading = ${it.data?.id}")
                         }
 
                         ApiStatus.ERROR -> {
@@ -72,7 +78,8 @@ class MovieDetailViewModel @Inject constructor(
                                     releaseDate = data?.releaseDate,
                                     voteAverage = data?.voteAverage,
                                     popularity = data?.popularity,
-                                    voteCount = data?.voteCount
+                                    voteCount = data?.voteCount,
+                                    language = data?.language
                                 )
                             }
                             _viewEffect.emit(MovieDetailViewEffect.OnSuccessGetMovie)

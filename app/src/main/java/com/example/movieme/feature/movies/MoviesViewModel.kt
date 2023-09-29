@@ -49,6 +49,7 @@ class MoviesViewModel @Inject constructor(
                 }
                 getMovies(_viewState.value.page)
             }
+
         }
     }
 

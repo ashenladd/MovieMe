@@ -1,7 +1,9 @@
 package com.example.movieme.data.source.remote.model
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class MovieListRes(
     @SerializedName("page")
     val page: Int? = null,

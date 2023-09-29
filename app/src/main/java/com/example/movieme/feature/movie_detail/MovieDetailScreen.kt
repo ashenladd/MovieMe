@@ -4,21 +4,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,27 +31,49 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.example.movieme.R
+import com.example.movieme.domain.model.MovieModel
+import com.example.movieme.feature.movie_detail.component.CustomButton
+import com.example.movieme.feature.movie_detail.component.MovieMoreDetailRow
+import com.example.movieme.feature.movie_detail.component.MoviePoster
+import com.example.movieme.feature.movie_detail.component.RatingStars
+import com.example.movieme.feature.movie_detail.component.TransparentTopAppBar
 import com.example.movieme.feature.theme.TextAppearanceCormorantMovieMeTitle2
 import com.example.movieme.feature.theme.TextAppearanceLexendMovieMeBody1
 import com.example.movieme.feature.theme.TextAppearanceLexendMovieMeSubtitle1
+import com.example.movieme.feature.utils.extractDatePartsFromDate
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun MovieDetailScreen(
     viewModel: MovieDetailViewModel = hiltViewModel(),
+    listener: MovieDetailListener? = null,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val stateMovie by viewModel.viewState.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            viewModel.onEvent(
+                MovieDetailViewEvent.RefreshPage(
+                    viewModel.currentId ?: -1
+                )
+            )
+        })
+    val dateParts = extractDatePartsFromDate(stateMovie.releaseDate.toString())
 
     LaunchedEffect(Unit) {
         viewModel.viewEffect.collectLatest {
@@ -64,34 +88,39 @@ fun MovieDetailScreen(
             }
         }
     }
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            TransparentTopAppBar()
+            TransparentTopAppBar { listener?.navigateBack() }
         }
     ) {
         Column(
             modifier = Modifier
+                .pullRefresh(pullRefreshState)
                 .padding(it)
                 .fillMaxSize()
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             MoviePoster(
                 modifier = Modifier.fillMaxWidth(),
-                urlPath = stateMovie.backdropPath,
+                urlPath = stateMovie.posterPath,
                 movieTitle = stateMovie.title
             )
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    RatingStars(rating10 = stateMovie.voteAverage ?: 0.0)
+                    RatingStars(
+                        rating10 = stateMovie.voteAverage ?: 0.0
+                    )
                     Text(
                         text = "${stateMovie.voteCount} Rating",
-                        style = TextAppearanceLexendMovieMeSubtitle1
+                        style = TextAppearanceLexendMovieMeSubtitle1.copy(color = Color.Gray)
                     )
                 }
                 Icon(
@@ -99,117 +128,115 @@ fun MovieDetailScreen(
                     contentDescription = "More"
                 )
             }
-
+            Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = stateMovie.title.orEmpty(),
+                text = stringResource(R.string.label_overview),
                 style = TextAppearanceCormorantMovieMeTitle2
             )
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = stateMovie.overview.orEmpty(),
-                style = TextAppearanceLexendMovieMeBody1
+                style = TextAppearanceLexendMovieMeBody1,
+                textAlign = TextAlign.Justify
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            CustomButton(text = stringResource(R.string.label_watch_now))
+            Spacer(modifier = Modifier.height(24.dp))
+            MovieMoreDetailRow(
+                textYear = dateParts?.year.toString(),
+                textDate = "${dateParts?.day} ${dateParts?.month}",
+                textLanguageTitle = stateMovie.language.toString(),
+                textLanguageSubtitle = "English"
             )
         }
-
+        Box(modifier = Modifier.fillMaxSize()) {
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+            )
+        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-fun TransparentTopAppBar() {
-    TopAppBar(
-        title = {},
-        navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_keyboard_arrow_left_24),
-                    contentDescription = "Back"
-                )
-            }
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            Color.Transparent
-        ),
-        actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorite"
-                )
-            }
-        }
-    )
-}
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoviePoster(
-    modifier: Modifier = Modifier,
-    urlPath: String?,
-    movieTitle: String?,
+fun MovieDetailScreenContent(
+    movieContent: MovieModel,
 ) {
-    Box(
-        modifier = modifier
+    val snackbarHostState = remember { SnackbarHostState() }
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        topBar = {
+            TransparentTopAppBar {}
+        }
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-
+                .padding(it)
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
         ) {
-            GlideImage(
-                model = "https://image.tmdb.org/t/p/original${urlPath}",
-                contentDescription = null,
+            MoviePoster(
+                modifier = Modifier.fillMaxWidth(),
+                urlPath = movieContent.backdropPath,
+                movieTitle = movieContent.title
             )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    RatingStars(
+                        rating10 = movieContent.voteAverage ?: 0.0
+                    )
+                    Text(
+                        text = "${movieContent.voteCount} Rating",
+                        style = TextAppearanceLexendMovieMeSubtitle1.copy(color = Color.Gray)
+                    )
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_more),
+                    contentDescription = "More"
+                )
+            }
+            Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = movieTitle.toString(),
+                text = stringResource(R.string.label_overview),
                 style = TextAppearanceCormorantMovieMeTitle2
             )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = movieContent.overview.orEmpty(),
+                style = TextAppearanceLexendMovieMeBody1
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            CustomButton(text = stringResource(R.string.label_watch_now))
         }
     }
 }
 
-
 @Preview
 @Composable
-fun PreviewMoviePoster() {
-    MoviePoster(
-        urlPath = "H6j5smdpRqP9a8UnhWp6zfl0SC",
-        movieTitle = "Blue Bittle"
+fun PreviewMovieDetailScreen() {
+    MovieDetailScreenContent(
+        movieContent = MovieModel(
+            title = "Call",
+            releaseDate = "24 Mei 2003",
+            popularity = 1231.0,
+            voteAverage = 8.0,
+            voteCount = 1222,
+            overview = "Lorem awdjiawjdoiawjdoiawj aiwodjoiawjdio aowijdoaiw jdioawj",
+            backdropPath = "H6j5smdpRqP9a8UnhWp6zfl0SC.jpg",
+            posterPath = "H6j5smdpRqP9a8UnhWp6zfl0SC.jpg"
+        )
     )
 }
 
 
-@Composable
-fun RatingStars(
-    modifier: Modifier = Modifier,
-    rating10: Double,
-    maxRating: Int = 5,
-    ratingColor: Color = Color(0xFFFDD147),
-) {
-    val rating5 = rating10 / 2
-    val fullStars = rating5.toInt()
-
-    Row(modifier = modifier) {
-        for (i in 1..maxRating) {
-            val iconColor = when {
-                i <= fullStars -> ratingColor
-                else -> Color.Gray
-            }
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                tint = iconColor,
-                modifier = Modifier.padding(2.dp)
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewRating() {
-    RatingStars(rating10 = 4.0)
-}
 

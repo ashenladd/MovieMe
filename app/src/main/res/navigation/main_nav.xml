@@ -13,6 +13,9 @@
         <argument
             android:name="feature_name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_moviesFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
