@@ -9,6 +9,6 @@ class MovieUseCase @Inject constructor(private val movieRepository: MovieReposit
     ) = movieRepository.getMovieList(page = page)
 
     suspend fun getMovie(
-        movieId: Int,
+        movieId: Long,
     ) = movieRepository.getMovie(movieId = movieId)
 }

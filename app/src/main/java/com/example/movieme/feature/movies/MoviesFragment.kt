@@ -4,28 +4,31 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieme.databinding.FragmentMoviesBinding
 import com.example.movieme.domain.model.MovieModel
+import com.example.movieme.feature.home.HomeFragmentDirections
 import com.example.movieme.feature.movies.adapter.MoviesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MoviesFragment : Fragment() {
+class MoviesFragment : Fragment(),MoviesListener {
 
     private var _binding: FragmentMoviesBinding? = null
     val binding get() = _binding!!
 
     private val mViewModel: MoviesViewModel by viewModels()
     private val mMoviesAdapter: MoviesAdapter by lazy {
-        MoviesAdapter()
+        MoviesAdapter(this)
     }
 
     override fun onCreateView(
@@ -91,6 +94,16 @@ class MoviesFragment : Fragment() {
             ibRightArrow.setOnClickListener {
                 mViewModel.onEvent(MoviesViewEvent.NextPage)
             }
+        }
+    }
+
+    override fun navigateToMovieDetail(movieId:Long) {
+        try {
+            val directions = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailFragment(movieId)
+            findNavController().navigate(directions)
+        }catch (e:Exception){
+            Toast.makeText(requireContext(),"${e.message}",
+                Toast.LENGTH_SHORT).show()
         }
     }
 }

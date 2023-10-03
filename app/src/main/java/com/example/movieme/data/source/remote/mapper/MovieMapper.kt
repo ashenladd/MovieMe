@@ -11,5 +11,7 @@ fun MovieResultRes.toModel() = MovieModel(
     backdropPath = backdropPath.orEmpty(),
     releaseDate = releaseDate.orEmpty(),
     voteAverage = voteAverage ?: 0.0,
-    popularity = popularity ?: 0.0
+    popularity = popularity ?: 0.0,
+    voteCount = voteCount ?: 0,
+    language = language.orEmpty()
 )

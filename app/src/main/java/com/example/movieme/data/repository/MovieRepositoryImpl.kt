@@ -1,5 +1,6 @@
 package com.example.movieme.data.repository
 
+import android.util.Log
 import com.example.movieme.data.source.remote.mapper.toModel
 import com.example.movieme.data.source.remote.network.MovieRemoteDataSource
 import com.example.movieme.domain.model.MovieModel
@@ -29,10 +30,12 @@ class MovieRepositoryImpl @Inject constructor(private val dataSource: MovieRemot
         }
     }
 
-    override suspend fun getMovie(movieId: Int): Flow<ApiResult<MovieModel>> {
+    override suspend fun getMovie(movieId: Long): Flow<ApiResult<MovieModel>> {
         return flow {
             val response = dataSource.getMovie(movieId)
+            Log.d("MovieRepoImpl","response = ${response.body()}")
             if (response.isSuccessful) {
+                Log.d("MovieRepoImpl","response Success = ${response.body()}")
                 emit(
                     ApiResult.Success(
                         _data = response.body()?.toModel() ?: MovieModel()

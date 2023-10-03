@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.movieme.databinding.ItemMovieVerticalBinding
 import com.example.movieme.domain.model.MovieModel
-import com.example.movieme.feature.movies.adapter.MoviesDiffUtil
-import com.example.movieme.feature.movies.adapter.MoviesViewHolder
+import com.example.movieme.feature.home.HomeListener
 
-class PopularMoviesAdapter : ListAdapter<MovieModel, PopularMoviesViewHolder>(
-    PopularMoviesDiffUtil()
-) {
+class PopularMoviesAdapter(private val listener: HomeListener) :
+    ListAdapter<MovieModel, PopularMoviesViewHolder>(
+        PopularMoviesDiffUtil()
+    ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMoviesViewHolder {
         return PopularMoviesViewHolder(
             ItemMovieVerticalBinding.inflate(
@@ -22,6 +22,6 @@ class PopularMoviesAdapter : ListAdapter<MovieModel, PopularMoviesViewHolder>(
     }
 
     override fun onBindViewHolder(holder: PopularMoviesViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position),listener)
     }
 }
